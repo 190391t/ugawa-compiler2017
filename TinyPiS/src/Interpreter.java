@@ -47,9 +47,9 @@ public class Interpreter extends InterpreterBase {
 
 	public static void main(String[] args) throws IOException {
 		ANTLRInputStream input = new ANTLRInputStream(System.in);
-		TinyPiELexer lexer = new TinyPiELexer(input);
+		TinyPiSLexer lexer = new TinyPiSLexer(input);
 		CommonTokenStream token = new CommonTokenStream(lexer);
-        TinyPiEParser parser = new TinyPiEParser(token);
+        TinyPiSParser parser = new TinyPiSParser(token);
         ParseTree tree = parser.expr();
         ASTGenerator astgen = new ASTGenerator();
         ASTNode ast = astgen.translate(tree);
