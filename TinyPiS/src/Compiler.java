@@ -157,6 +157,7 @@ public class Compiler extends CompilerBase {
 			emitPOP(REG_R7);
 			emitPOP(REG_R8);
 			emitPOP(REG_R9);
+			
 		}
 		else
 			throw new Error("Unknown expression: "+ndx);
