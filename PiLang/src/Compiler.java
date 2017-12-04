@@ -29,11 +29,24 @@ public class Compiler extends CompilerBase {
 		emitPUSH(REG_LR);
 		emitPUSH(REG_R1);
 		emitRRI("sub", REG_SP, REG_SP, nd.varDecls.size() * 4);
+		
+		for (int n = 0; n < nd.varDecls.size(); n++) {
+			String name = nd.varDecls.get(n);
+			int offset = (n + 3) * (-4);
+			LocalVariable var = new LocalVariable(name, offset);
+			env.push(var);
+		}
+		
 		for (ASTNode stmt: nd.stmts)
 			compileStmt(stmt, epilogueLabel, env);
 		emitRI("mov", REG_DST, 0);  // returnがなかったときの戻り値0
 		emitLabel(epilogueLabel);
 		/*ここにエピローグを生成するコードを書くこと*/
+		System.out.println("\t@ prologue");
+		emitRRI("add", REG_SP, REG_SP, 4 * nd.varDecls.size());
+		emitPOP(REG_R1);
+		emitPOP(REG_LR);
+		emitPOP(REG_FP);
 		emitRET();
 	}
 	
@@ -55,8 +68,11 @@ public class Compiler extends CompilerBase {
 				GlobalVariable globalVar = (GlobalVariable) var;
 				emitLDC(REG_R1, globalVar.getLabel());
 				emitSTR(REG_DST, REG_R1, 0);
-			} else
-				throw new Error("Not a global variable: "+nd.var);
+			} else {
+				LocalVariable localVar = (LocalVariable) var;
+				int offset = localVar.offset;
+				emitSTR(REG_DST, REG_FP, offset);
+			}
 		} else if (ndx instanceof ASTIfStmtNode) {
 			ASTIfStmtNode nd = (ASTIfStmtNode) ndx;
 			String elseLabel = freshLabel();
@@ -155,6 +171,8 @@ public class Compiler extends CompilerBase {
 			compileExpr(nd.rhs, env);
 			if (nd.op.equals("+"))
 				emitRRR("add", REG_DST, REG_R1, REG_DST);
+			else if (nd.op.equals("-"))
+				emitRRR("sub", REG_DST, REG_R1, REG_DST);
 			else if (nd.op.equals("*"))
 				emitRRR("mul", REG_DST, REG_R1, REG_DST);
 			else if (nd.op.equals("/"))
@@ -181,13 +199,18 @@ public class Compiler extends CompilerBase {
 			ASTVarRefNode nd = (ASTVarRefNode) ndx;
 			Variable var = env.lookup(nd.varName);
 			if (var == null)
+				var = globalEnv.lookup(nd.varName);
+			if (var == null)
 				throw new Error("Undefined variable: "+nd.varName);
 			if (var instanceof GlobalVariable) {
 				GlobalVariable globalVar = (GlobalVariable) var;
 				emitLDC(REG_DST, globalVar.getLabel());
 				emitLDR(REG_DST, REG_DST, 0);
-			} else
-				throw new Error("Not a global variable: "+nd.varName);
+			} else {
+				LocalVariable localVar = (LocalVariable) var;
+				int offset = localVar.offset;
+				emitSTR(REG_DST, REG_FP, offset);
+			}
 		} else if (ndx instanceof ASTUnaryExprNode) {
 			ASTUnaryExprNode nd = (ASTUnaryExprNode) ndx;
 			compileExpr(nd.lhs, env);
@@ -231,6 +254,12 @@ public class Compiler extends CompilerBase {
 		/* 関数定義 */
 		for (ASTFunctionNode func: program.funcDecls)
 			compileFunction(func);
+		
+		System.out.println(".section .data");
+		emitLabel("buf");
+		System.out.println("\t .space 16,0x30");
+		System.out.println(".byte 0x0a");
+		
 	}
 
 	public static void main(String[] args) throws IOException {

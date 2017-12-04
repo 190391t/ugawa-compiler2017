@@ -1,6 +1,4 @@
-var y;
 function main() {
- 	y = 3;
- 	y = y + 3;
- 	return y;
+ 	print 10;
+ 	return 0;
 }
