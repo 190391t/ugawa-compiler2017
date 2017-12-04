@@ -22,8 +22,8 @@ mulExpr: mulExpr MULOP unaryExpr
 
 unaryExpr: 	VALUE		# literalExpr
 	| IDENTIFIER			# varExpr
-	| '(' expr ')'			# parenExpr
-	| MINUSOP unaryExpr				#unExpr
+	| '(' expr ')'		# parenExpr
+	| MINUSOP unaryExpr  # unExpr
 	;
 
 ADDOP: '+';

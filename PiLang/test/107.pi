@@ -1,4 +1,0 @@
-function main() {
-  return 7 | 3 & 1;
-}
-

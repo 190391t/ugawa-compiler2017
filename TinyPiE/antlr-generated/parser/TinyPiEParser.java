@@ -90,6 +90,10 @@ public class TinyPiEParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
+		public ParseTree addExpr() {
+			// TODO 自動生成されたメソッド・スタブ
+			return null;
+		}
 	}
 
 	public final ExprContext expr() throws RecognitionException {

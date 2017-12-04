@@ -46,9 +46,10 @@ public class Compiler extends CompilerBase {
 				compileExpr(nd.lhs, env);
 				emitPUSH(REG_R1);
 				emitRR("mov", REG_R1, REG_DST);
-				if (nd.op.equals("-"))
-					emitRRR("sub", REG_DST, REG_R1, REG_DST);
-				else if (nd.op.equals("~"))
+				if (nd.op.equals("-")) {
+					emitRR("mvn", REG_DST, REG_DST);
+					emitRRI("add", REG_DST, REG_DST, 1);	
+				} else if (nd.op.equals("~"))
 					emitRR("mvn", REG_DST, REG_R1);
 				else 
 					throw new Error("Not a giobal variable: "+nd.op);

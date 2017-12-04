@@ -111,3 +111,27 @@ class ASTVarRefNode extends ASTNode {
 		return "(VarRef "+varName+")";
 	}
 }
+
+class ASTUnaryExprNode extends ASTNode {
+	String op;
+	ASTNode lhs;
+	ASTUnaryExprNode(String op, ASTNode lhs) {
+		this.op = op;
+		this.lhs = lhs;
+	}
+	@Override
+	public String toString() {
+		return "(UnExpr "+op+" "+lhs+")";
+	}
+}
+
+class ASTPrintStmtNode extends ASTNode {
+	ASTNode expr;
+	ASTPrintStmtNode(ASTNode expr) {
+		this.expr = expr;
+	}
+	@Override
+	public String toString() {
+		return "(printExpr "+expr+")";
+	}
+}

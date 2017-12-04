@@ -13,10 +13,10 @@ public class PrintAST {
 		ANTLRInputStream input = new ANTLRInputStream(System.in);
 		TinyPiSLexer lexer = new TinyPiSLexer(input);
 		CommonTokenStream token = new CommonTokenStream(lexer);
-        TinyPiSParser parser = new TinyPiSParser(token);
-        ParseTree tree = parser.prog();
-        ASTGenerator astgen = new ASTGenerator();
-        ASTNode ast = astgen.translate(tree);
-        System.out.println(ast);
+       TinyPiSParser parser = new TinyPiSParser(token);
+       ParseTree tree = parser.prog();
+       ASTGenerator astgen = new ASTGenerator();
+       ASTNode ast = astgen.translate(tree);
+       System.out.println(ast);
 	}
 }
