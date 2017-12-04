@@ -13,8 +13,8 @@ _start:
 	ldr r0, =#1
 	str r1, [sp, #-4]!
 	mov r1, r0
-	mvn r0, r1
-	add r0, r0, #1
+	ldr r0, =#1
+	sub r0, r1, r0
 	ldr r1, [sp], #4
 	@ EXITシステムコール
 	mov r7, #1

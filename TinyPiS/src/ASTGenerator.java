@@ -11,14 +11,16 @@ import parser.TinyPiSParser.ExprContext;
 import parser.TinyPiSParser.IfStmtContext;
 import parser.TinyPiSParser.LiteralExprContext;
 import parser.TinyPiSParser.MulExprContext;
+import parser.TinyPiSParser.NotExprContext;
 import parser.TinyPiSParser.OrExprContext;
 import parser.TinyPiSParser.ParenExprContext;
+import parser.TinyPiSParser.PrintExprContext;
 import parser.TinyPiSParser.ProgContext;
 import parser.TinyPiSParser.StmtContext;
-import parser.TinyPiSParser.UnExprContext;
+import parser.TinyPiSParser.SubExprContext;
 import parser.TinyPiSParser.VarExprContext;
 import parser.TinyPiSParser.WhileStmtContext;
-import parser.TinyPiSParser.PrintExprContext;
+
 
 public class ASTGenerator {	
 	ASTNode translate(ParseTree ctxx) {
@@ -76,11 +78,16 @@ public class ASTGenerator {
 			return new ASTBinaryExprNode(ctx.ANDOP().getText(), lhs, rhs);		
 		} else if (ctxx instanceof AddExprContext) {
 			AddExprContext ctx = (AddExprContext) ctxx;
+			String str;
 			if (ctx.addExpr() == null)
 				return translate(ctx.mulExpr());
+			if (ctx.ADDOP() != null)
+				str = ctx.ADDOP().getText();
+			else
+				str = ctx.SUBOP().getText();
 			ASTNode lhs = translate(ctx.addExpr());
 			ASTNode rhs = translate(ctx.mulExpr());
-			return new ASTBinaryExprNode(ctx.ADDOP().getText(), lhs, rhs);
+			return new ASTBinaryExprNode(str, lhs, rhs);
 		} else if (ctxx instanceof MulExprContext) {
 			MulExprContext ctx = (MulExprContext) ctxx;
 			if (ctx.mulExpr() == null)
@@ -102,10 +109,14 @@ public class ASTGenerator {
 		} else if (ctxx instanceof ParenExprContext) {
 			ParenExprContext ctx = (ParenExprContext) ctxx;
 			return translate(ctx.expr());
-		} else if (ctxx instanceof UnExprContext) {
-			UnExprContext ctx = (UnExprContext) ctxx;
-			ASTNode lhs = translate(ctx.unaryExpr());
-			return new ASTUnaryExprNode(ctx.MINUSOP().getText(), lhs);
+		} else if (ctxx instanceof SubExprContext) {
+			SubExprContext ctx = (SubExprContext) ctxx;
+			ASTNode lhs = translate(ctx.expr());
+			return new ASTUnaryExprNode(ctx.SUBOP().getText(), lhs);
+		} else if (ctxx instanceof NotExprContext) {
+			NotExprContext ctx = (NotExprContext) ctxx;
+			ASTNode lhs = translate(ctx.expr());
+			return new ASTUnaryExprNode(ctx.NOTOP().getText(), lhs);
 		} 
 		throw new Error("Unknown parse tree node: "+ctxx.getText());		
 	}

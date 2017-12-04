@@ -17,7 +17,7 @@ public class ParseTreeInterpreter extends InterpreterBase {
 	int evalExpr(ParseTree ctxx, Environment env) {
 		if (ctxx instanceof ExprContext) {
 			ExprContext ctx = (ExprContext) ctxx;
-			return evalExpr(ctx.addExpr(), env);
+			return evalExpr(ctx.orExpr(), env);
 		} else if (ctxx instanceof AddExprContext) {
 			AddExprContext ctx = (AddExprContext) ctxx;
 			if (ctx.addExpr() == null)

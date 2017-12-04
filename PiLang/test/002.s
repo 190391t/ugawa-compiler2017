@@ -24,9 +24,13 @@ main:
 	b L0
 	mov r0, #0
 L0:
-	@ epilogue
+	@ prologue
 	add sp, sp, #0
 	ldr r1, [sp], #4
 	ldr r14, [sp], #4
 	ldr r11, [sp], #4
 	bx r14
+.section .data
+buf:
+	 .space 16,0x30
+.byte 0x0a

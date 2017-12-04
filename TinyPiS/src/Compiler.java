@@ -18,6 +18,8 @@ public class Compiler extends CompilerBase {
 			compileExpr(nd.rhs, env);
 			if (nd.op.equals("+"))
 				emitRRR("add", REG_DST, REG_R1, REG_DST);
+			else if (nd.op.equals("-"))
+				emitRRR("sub", REG_DST, REG_R1, REG_DST);
 			else if (nd.op.equals("*"))
 				emitRRR("mul", REG_DST, REG_R1, REG_DST);
 			else if (nd.op.equals("/"))
