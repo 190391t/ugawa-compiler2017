@@ -1,0 +1,6 @@
+var y;
+function main() {
+ 	y = 3;
+ 	y = y + 3;
+ 	return y;
+}
