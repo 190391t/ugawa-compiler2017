@@ -686,8 +686,8 @@ public class TinyPiSParser extends Parser {
 	}
 	public static class NotExprContext extends UnaryExprContext {
 		public TerminalNode NOTOP() { return getToken(TinyPiSParser.NOTOP, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public UnaryExprContext unaryExpr() {
+			return getRuleContext(UnaryExprContext.class,0);
 		}
 		public NotExprContext(UnaryExprContext ctx) { copyFrom(ctx); }
 	}
@@ -697,8 +697,8 @@ public class TinyPiSParser extends Parser {
 	}
 	public static class SubExprContext extends UnaryExprContext {
 		public TerminalNode SUBOP() { return getToken(TinyPiSParser.SUBOP, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public UnaryExprContext unaryExpr() {
+			return getRuleContext(UnaryExprContext.class,0);
 		}
 		public SubExprContext(UnaryExprContext ctx) { copyFrom(ctx); }
 	}
@@ -751,7 +751,7 @@ public class TinyPiSParser extends Parser {
 				setState(117);
 				match(SUBOP);
 				setState(118);
-				expr();
+				unaryExpr();
 				}
 				break;
 			case NOTOP:
@@ -761,7 +761,7 @@ public class TinyPiSParser extends Parser {
 				setState(119);
 				match(NOTOP);
 				setState(120);
-				expr();
+				unaryExpr();
 				}
 				break;
 			default:
@@ -852,8 +852,8 @@ public class TinyPiSParser extends Parser {
 		"\17\3\2\2\2ec\3\2\2\2fg\b\t\1\2gh\5\22\n\2hn\3\2\2\2ij\f\4\2\2jk\7\17"+
 		"\2\2km\5\22\n\2li\3\2\2\2mp\3\2\2\2nl\3\2\2\2no\3\2\2\2o\21\3\2\2\2pn"+
 		"\3\2\2\2q|\7\25\2\2r|\7\24\2\2st\7\t\2\2tu\5\b\5\2uv\7\n\2\2v|\3\2\2\2"+
-		"wx\7\22\2\2x|\5\b\5\2yz\7\23\2\2z|\5\b\5\2{q\3\2\2\2{r\3\2\2\2{s\3\2\2"+
-		"\2{w\3\2\2\2{y\3\2\2\2|\23\3\2\2\2\13\34#>JUacn{";
+		"wx\7\22\2\2x|\5\22\n\2yz\7\23\2\2z|\5\22\n\2{q\3\2\2\2{r\3\2\2\2{s\3\2"+
+		"\2\2{w\3\2\2\2{y\3\2\2\2|\23\3\2\2\2\13\34#>JUacn{";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
